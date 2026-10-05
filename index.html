@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Blocmo — Puzzle de blocs</title>
+    <meta name="description" content="Blocmo, le puzzle de blocs relaxant et addictif. Gratuit sur Android." />
+    <link rel="icon" href="icon.png" />
+    <style>
+      :root { --bg1: #3a2580; --bg2: #140f2e; --accent: #ffd23f; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: #fff; font: 17px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 48px 16px; }
+      img.icon { width: 128px; height: 128px; border-radius: 28px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+      h1 { font-size: 48px; margin: 24px 0 4px; color: var(--accent); }
+      p { max-width: 520px; color: #d9d3f5; }
+      .shots { display: flex; gap: 16px; overflow-x: auto; max-width: 100%; padding: 24px 4px; }
+      .shots img { height: 420px; border-radius: 18px; box-shadow: 0 12px 30px rgba(0,0,0,.4); }
+      .btn { display: inline-block; margin-top: 12px; padding: 14px 26px; border-radius: 16px; background: linear-gradient(180deg, #ffd84a, #ffa41c); color: #3d1d00; font-weight: 700; text-decoration: none; }
+      footer { margin-top: auto; padding-top: 40px; font-size: 14px; }
+      footer a { color: #d9d3f5; }
+    </style>
+  </head>
+  <body>
+    <img class="icon" src="icon.png" alt="Icône Blocmo" />
+    <h1>Blocmo</h1>
+    <p>Le puzzle de blocs relaxant et addictif : place les pièces, efface les lignes, enchaîne les combos. Des centaines de niveaux d'aventure, un cadeau et des missions chaque jour, des classements mondiaux, 18 langues, jouable hors ligne.</p>
+    <!-- Remplace href par le lien de la fiche Play Store après publication -->
+    <a class="btn" href="#">Bientôt sur Google Play</a>
+    <div class="shots">
+      <img src="screenshots/1.png" alt="Capture du jeu" />
+      <img src="screenshots/2.png" alt="Capture du jeu" />
+      <img src="screenshots/3.png" alt="Capture du jeu" />
+    </div>
+    <footer>
+      <a href="privacy.html">Politique de confidentialité / Privacy policy</a>
+    </footer>
+  </body>
+</html>
