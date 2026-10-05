@@ -1,0 +1,11 @@
+{
+  "name": "Blocmo",
+  "short_name": "Blocmo",
+  "description": "Le puzzle de blocs relaxant et addictif.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2a1b5c",
+  "theme_color": "#2a1b5c",
+  "icons": [{ "src": "icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }]
+}
