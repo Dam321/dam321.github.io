@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Duel Blocmo</title>
+    <meta name="description" content="Un ami te défie sur Blocmo : mêmes pièces, 2 minutes, le meilleur score gagne." />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="../icon.png" />
+    <style>
+      :root { --bg1: #3a2580; --bg2: #140f2e; --accent: #ffd23f; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: #fff; font: 17px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 16px; }
+      img.icon { width: 96px; height: 96px; border-radius: 24px; box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+      h1 { font-size: 34px; margin: 20px 0 4px; color: var(--accent); }
+      .vs { margin: 10px 0 4px; font-size: 22px; font-weight: 700; }
+      .score { font-size: 52px; font-weight: 800; line-height: 1.1; }
+      p { max-width: 460px; color: #d9d3f5; margin: 8px auto; }
+      .btn { display: block; width: min(100%, 360px); margin: 10px auto 0; padding: 15px 22px; border: none; border-radius: 16px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+      .primary { background: linear-gradient(180deg, #ffd84a, #ffa41c); color: #3d1d00; }
+      .ghost { background: rgba(255,255,255,.12); color: #fff; }
+      code { display: block; width: min(100%, 360px); margin: 14px auto 0; padding: 10px; border-radius: 12px; background: rgba(0,0,0,.3); color: #d9d3f5; font-size: 12px; word-break: break-all; user-select: all; }
+      .hidden { display: none; }
+      footer { margin-top: auto; padding-top: 36px; font-size: 14px; }
+      footer a { color: #d9d3f5; }
+    </style>
+  </head>
+  <body>
+    <img class="icon" src="../icon.png" alt="Blocmo" />
+    <h1 id="title">Duel Blocmo</h1>
+    <div id="challenge" class="hidden">
+      <div class="vs" id="vs"></div>
+      <div class="score" id="score"></div>
+    </div>
+    <p id="rules"></p>
+    <a class="btn primary" id="open" href="#"></a>
+    <button class="btn ghost" id="copy" type="button"></button>
+    <code id="code"></code>
+    <p id="how"></p>
+    <!-- Remplace href par le lien de la fiche Play Store après publication -->
+    <a class="btn ghost" id="store" href="https://play.google.com/store/apps/details?id=fr.blocmo.game"></a>
+    <footer><a href="../privacy.html">Politique de confidentialité / Privacy policy</a></footer>
+    <script>
+      // Le code de duel est après le « # » : il reste dans le navigateur, il n'est jamais envoyé au serveur.
+      const T = {
+        fr: ['Duel Blocmo', '{name} te défie', 'Mêmes pièces pour vous deux, 2 minutes chacun. Le meilleur score gagne !', 'Relever le défi dans Blocmo', 'Copier le code', 'Code copié !', 'Si le jeu ne s’ouvre pas : copie le code, ouvre Blocmo, touche « Duel » puis colle-le.', 'Installer Blocmo', 'Ce lien de duel est incomplet.'],
+        en: ['Blocmo duel', '{name} challenges you', 'Same pieces for both of you, 2 minutes each. Highest score wins!', 'Take the challenge in Blocmo', 'Copy the code', 'Code copied!', 'If the game doesn’t open: copy the code, open Blocmo, tap “Duel” and paste it.', 'Get Blocmo', 'This duel link is incomplete.'],
+        es: ['Duelo Blocmo', '{name} te reta', 'Las mismas piezas para los dos, 2 minutos cada uno. ¡Gana la mejor puntuación!', 'Aceptar el reto en Blocmo', 'Copiar el código', '¡Código copiado!', 'Si el juego no se abre: copia el código, abre Blocmo, toca «Duelo» y pégalo.', 'Instalar Blocmo', 'Este enlace de duelo está incompleto.'],
+        de: ['Blocmo-Duell', '{name} fordert dich heraus', 'Gleiche Teile für beide, je 2 Minuten. Die höchste Punktzahl gewinnt!', 'Herausforderung in Blocmo annehmen', 'Code kopieren', 'Code kopiert!', 'Falls sich das Spiel nicht öffnet: Code kopieren, Blocmo öffnen, auf „Duell“ tippen und einfügen.', 'Blocmo holen', 'Dieser Duell-Link ist unvollständig.'],
+        pt: ['Duelo Blocmo', '{name} desafiou você', 'As mesmas peças para os dois, 2 minutos cada. Vence a maior pontuação!', 'Aceitar o desafio no Blocmo', 'Copiar o código', 'Código copiado!', 'Se o jogo não abrir: copie o código, abra o Blocmo, toque em “Duelo” e cole.', 'Instalar Blocmo', 'Este link de duelo está incompleto.'],
+        it: ['Sfida Blocmo', '{name} ti sfida', 'Stessi pezzi per entrambi, 2 minuti a testa. Vince il punteggio più alto!', 'Accetta la sfida in Blocmo', 'Copia il codice', 'Codice copiato!', 'Se il gioco non si apre: copia il codice, apri Blocmo, tocca “Sfida” e incollalo.', 'Installa Blocmo', 'Questo link di sfida è incompleto.'],
+        ja: ['Blocmo 対戦', '{name}からの挑戦', '2人とも同じピース、持ち時間は各2分。スコアが高い方の勝ち！', 'Blocmoで挑戦を受ける', 'コードをコピー', 'コピーしました！', 'ゲームが開かないときは、コードをコピーしてBlocmoを開き、「対戦」に貼り付けてね。', 'Blocmoを入手', 'この対戦リンクは不完全です。'],
+        ko: ['Blocmo 대결', '{name}님의 도전', '두 사람 모두 같은 블록, 각자 2분. 점수가 높은 사람이 승리!', 'Blocmo에서 도전 수락', '코드 복사', '복사했어요!', '게임이 열리지 않으면 코드를 복사해 Blocmo의 「대결」에 붙여 넣으세요.', 'Blocmo 받기', '대결 링크가 불완전해요.'],
+        'zh-Hans': ['Blocmo 对战', '{name} 向你发起挑战', '双方方块完全相同，每人2分钟。分数高者获胜！', '在 Blocmo 中应战', '复制代码', '已复制！', '如果游戏没有打开：复制代码，打开 Blocmo，点「对战」并粘贴。', '获取 Blocmo', '此对战链接不完整。'],
+        'zh-Hant': ['Blocmo 對戰', '{name} 向你發起挑戰', '雙方方塊完全相同，每人2分鐘。分數高者獲勝！', '在 Blocmo 中應戰', '複製代碼', '已複製！', '如果遊戲沒有開啟：複製代碼，開啟 Blocmo，點「對戰」並貼上。', '取得 Blocmo', '此對戰連結不完整。'],
+        tr: ['Blocmo düellosu', '{name} sana meydan okuyor', 'İki oyuncuya da aynı parçalar, herkese 2 dakika. En yüksek puan kazanır!', 'Blocmo’da meydan okumayı kabul et', 'Kodu kopyala', 'Kod kopyalandı!', 'Oyun açılmazsa: kodu kopyala, Blocmo’yu aç, «Düello»ya dokun ve yapıştır.', 'Blocmo’yu indir', 'Bu düello bağlantısı eksik.'],
+        ru: ['Дуэль Blocmo', '{name} бросает тебе вызов', 'Одинаковые фигуры у обоих, по 2 минуты. Побеждает больший счёт!', 'Принять вызов в Blocmo', 'Скопировать код', 'Код скопирован!', 'Если игра не открылась: скопируй код, открой Blocmo, нажми «Дуэль» и вставь его.', 'Установить Blocmo', 'Ссылка на дуэль неполная.'],
+        id: ['Duel Blocmo', '{name} menantangmu', 'Keping sama untuk kalian berdua, masing-masing 2 menit. Skor tertinggi menang!', 'Terima tantangan di Blocmo', 'Salin kode', 'Kode disalin!', 'Jika game tidak terbuka: salin kode, buka Blocmo, ketuk “Duel” lalu tempel.', 'Pasang Blocmo', 'Tautan duel ini tidak lengkap.'],
+        nl: ['Blocmo-duel', '{name} daagt je uit', 'Dezelfde blokken voor allebei, 2 minuten per speler. De hoogste score wint!', 'Uitdaging aannemen in Blocmo', 'Code kopiëren', 'Code gekopieerd!', 'Opent het spel niet? Kopieer de code, open Blocmo, tik op „Duel” en plak hem.', 'Blocmo downloaden', 'Deze duellink is onvolledig.'],
+        pl: ['Pojedynek Blocmo', '{name} rzuca ci wyzwanie', 'Te same klocki dla obu graczy, po 2 minuty. Wygrywa wyższy wynik!', 'Przyjmij wyzwanie w Blocmo', 'Kopiuj kod', 'Skopiowano!', 'Jeśli gra się nie otworzy: skopiuj kod, otwórz Blocmo, dotknij „Pojedynek” i wklej go.', 'Pobierz Blocmo', 'Ten link do pojedynku jest niepełny.'],
+        vi: ['Thách đấu Blocmo', '{name} thách đấu bạn', 'Cả hai cùng bộ khối, mỗi người 2 phút. Điểm cao hơn sẽ thắng!', 'Nhận lời trong Blocmo', 'Sao chép mã', 'Đã sao chép!', 'Nếu trò chơi không mở: sao chép mã, mở Blocmo, chạm “Đấu” rồi dán vào.', 'Tải Blocmo', 'Liên kết thách đấu bị thiếu.'],
+        th: ['ดวล Blocmo', '{name} ท้าคุณ', 'ทั้งสองคนได้บล็อกเหมือนกัน คนละ 2 นาที คะแนนสูงกว่าชนะ!', 'รับคำท้าใน Blocmo', 'คัดลอกรหัส', 'คัดลอกแล้ว!', 'ถ้าเกมไม่เปิด: คัดลอกรหัส เปิด Blocmo แตะ “ดวล” แล้ววาง', 'ติดตั้ง Blocmo', 'ลิงก์ดวลนี้ไม่ครบ'],
+        hi: ['Blocmo मुकाबला', '{name} ने तुम्हें चुनौती दी है', 'दोनों को एक जैसे ब्लॉक, हर किसी को 2 मिनट। ज़्यादा अंक वाला जीतेगा!', 'Blocmo में चुनौती स्वीकार करो', 'कोड कॉपी करो', 'कोड कॉपी हो गया!', 'अगर गेम न खुले: कोड कॉपी करो, Blocmo खोलो, “मुकाबला” पर टैप करके पेस्ट करो।', 'Blocmo पाओ', 'यह मुकाबले का लिंक अधूरा है।'],
+      };
+      // Mêmes noms que dans le jeu (src/core/profile.ts), dans le même ordre.
+      const NAMES = ['Bloki', 'Zapo', 'Kiwi', 'Momo', 'Pixel', 'Nova', 'Tako', 'Yuzu', 'Luma', 'Ziggy', 'Pompon', 'Nugget', 'Mochi', 'Bubu', 'Fizz', 'Gizmo', 'Koko', 'Lulu', 'Miko', 'Nimbus', 'Oreo', 'Pipo', 'Quokka', 'Rumi', 'Sora', 'Tiko', 'Ubu', 'Vivi', 'Wasabi', 'Yoyo', 'Zuzu', 'Bibop', 'Caramel', 'Dodo', 'Elfi', 'Flipo', 'Gumbo', 'Hiko', 'Indi', 'Jojo', 'Kumo', 'Loopy', 'Maki', 'Nacho', 'Olly', 'Pepito', 'Ricky', 'Taro'];
+      const pref = (navigator.languages || [navigator.language || 'en']).map((l) => (l || '').toLowerCase());
+      let lang = 'en';
+      for (const l of pref) {
+        if (l.startsWith('zh')) { lang = /hant|tw|hk|mo/.test(l) ? 'zh-Hant' : 'zh-Hans'; break; }
+        const c = l.split('-')[0] === 'in' ? 'id' : l.split('-')[0];
+        if (T[c]) { lang = c; break; }
+      }
+      const t = T[lang];
+      document.documentElement.lang = lang;
+      const code = (location.hash.match(/[A-Za-z0-9_-]{20,}/) || [''])[0];
+      const $ = (id) => document.getElementById(id);
+      $('title').textContent = t[0];
+      $('rules').textContent = t[2];
+      $('open').textContent = t[3];
+      $('copy').textContent = t[4];
+      $('how').textContent = t[6];
+      $('store').textContent = t[7];
+      if (!code) {
+        $('rules').textContent = t[8];
+        $('open').classList.add('hidden');
+        $('copy').classList.add('hidden');
+      } else {
+        $('code').textContent = code;
+        $('open').href = 'blocmo://duel?c=' + code;
+        // Lecture du pseudo et du score (format binaire du jeu, sans vérification : le jeu vérifie en rejouant).
+        try {
+          const B = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+          const bytes = [];
+          let buf = 0, bits = 0;
+          for (const ch of code) { buf = (buf << 6) | B.indexOf(ch); bits += 6; if (bits >= 8) { bits -= 8; bytes.push((buf >> bits) & 255); } }
+          let pos = 0;
+          const u8 = () => bytes[pos++];
+          const varint = () => { let n = 0, mul = 1; for (let i = 0; i < 5; i++) { const b = u8(); n += (b & 127) * mul; if (!(b & 128)) return n; mul *= 128; } return n; };
+          if (u8() === 1) {
+            pos += 8; // graine + identifiant
+            const name = NAMES[u8() % NAMES.length];
+            const num = String(varint() % 10000).padStart(4, '0');
+            pos += 4; // avatar
+            varint(); // niveau
+            const score = varint();
+            $('vs').textContent = t[1].replace('{name}', name + '#' + num);
+            $('score').textContent = new Intl.NumberFormat(lang).format(score) + ' pts';
+            $('challenge').classList.remove('hidden');
+          }
+        } catch (e) { /* code illisible : on affiche quand même les boutons */ }
+      }
+      $('copy').addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(code); } catch (e) { /* le code reste sélectionnable */ }
+        $('copy').textContent = t[5];
+      });
+    </script>
+  </body>
+</html>

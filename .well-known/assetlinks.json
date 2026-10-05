@@ -1,0 +1,10 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "fr.blocmo.game.test",
+      "sha256_cert_fingerprints": ["17:72:26:E4:22:C1:16:F9:3D:AA:30:9F:D2:FB:7E:A7:EE:E1:65:6C:D4:D0:68:81:AA:67:AB:F5:E5:8A:62:AF"]
+    }
+  }
+]
