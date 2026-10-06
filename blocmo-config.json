@@ -1,0 +1,6 @@
+{
+  "_aide": "Réglages de Blocmo lus par le jeu (au lancement et au retour dans le jeu). minBuild : les versions Android plus anciennes doivent se mettre à jour (écran bloquant). latestBuild : les versions plus anciennes voient « Nouvelle version disponible » (une fois par jour). maintenance : null, ou { \"scope\": \"online\" (fonctions en ligne seulement) ou \"all\" (tout le jeu), \"until\": \"2026-10-07T08:00:00Z\" (fin prévue, heure UTC) }. Effet en moins de 10 minutes. Voir docs/GUIDE_PUBLICATION.md (Blocmo).",
+  "minBuild": 0,
+  "latestBuild": 0,
+  "maintenance": null
+}
