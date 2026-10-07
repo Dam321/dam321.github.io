@@ -11,8 +11,8 @@
     <link rel="manifest" href="./manifest.webmanifest" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <script type="module" crossorigin src="./assets/index-C1r8Dubj.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-xoJMmFeV.css">
+    <script type="module" crossorigin src="./assets/index-DypKyEKv.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-T8ZuQ8oR.css">
   </head>
   <body>
     <main id="game-screen">
@@ -38,5 +38,19 @@
     <div id="modals"></div>
     <div id="busy" role="progressbar" aria-busy="true"></div>
     <div id="toast" role="status" aria-live="polite"></div>
+    <script>
+      // Téléphone ou navigateur trop ancien pour le jeu : page d'explication plutôt qu'un écran noir.
+      (function () {
+        function fallback() {
+          if (!window.__blocmoBooted) location.replace('webview.html');
+        }
+        // Sans modules JavaScript, le jeu ne démarrerait jamais ; avec une syntaxe trop récente, il plante au chargement.
+        // (Pas de minuterie : sur une connexion lente, la version navigateur peut mettre longtemps à charger.)
+        if (!('noModule' in document.createElement('script'))) fallback();
+        window.addEventListener('error', function (e) {
+          if (/SyntaxError|Unexpected token|Unexpected identifier/i.test(String(e && e.message))) fallback();
+        });
+      })();
+    </script>
   </body>
 </html>

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#2a1b5c" />
+    <title>Blocmo</title>
+    <!--
+      Page affichée quand le jeu ne peut pas démarrer : WebView Android trop ancienne (Capacitor, minWebViewVersion)
+      ou navigateur trop ancien (filet de sécurité d'index.html). Volontairement très simple (aucun JavaScript
+      moderne) pour fonctionner sur les plus vieux téléphones.
+    -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #140f2e;
+        color: #fff;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      body {
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .box {
+        max-width: 380px;
+        padding: 24px;
+      }
+      img {
+        width: 96px;
+        height: 96px;
+        border-radius: 22px;
+      }
+      h1 {
+        margin: 18px 0 10px;
+        font-size: 24px;
+      }
+      p {
+        margin: 0 0 22px;
+        line-height: 1.45;
+        color: #d9d3ff;
+      }
+      a {
+        display: inline-block;
+        padding: 14px 26px;
+        border-radius: 16px;
+        background: #ffd23f;
+        color: #2a1600;
+        font-weight: bold;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <img src="icon.png" alt="" />
+      <h1 id="t">Update needed</h1>
+      <p id="b">Your phone's “Android System WebView” is too old to run Blocmo. Update it for free on the Play Store (or update Google Chrome), then open the game again.</p>
+      <a id="a" href="https://play.google.com/store/apps/details?id=com.google.android.webview">Open the Play Store</a>
+    </div>
+    <script>
+      (function () {
+        // [titre, texte (téléphone), bouton, texte (navigateur)]
+        var T = {
+          fr: ['Mise à jour nécessaire', 'Le composant « Android System WebView » de ton téléphone est trop ancien pour lancer Blocmo. Mets-le à jour gratuitement sur le Play Store (ou mets à jour Google Chrome), puis rouvre le jeu.', 'Ouvrir le Play Store', 'Ton navigateur est trop ancien pour lancer Blocmo. Mets-le à jour (ou utilise Google Chrome), puis recharge la page.'],
+          en: ['Update needed', 'Your phone’s “Android System WebView” is too old to run Blocmo. Update it for free on the Play Store (or update Google Chrome), then open the game again.', 'Open the Play Store', 'Your browser is too old to run Blocmo. Update it (or use Google Chrome), then reload the page.'],
+          es: ['Actualización necesaria', 'El componente «Android System WebView» de tu teléfono es demasiado antiguo para abrir Blocmo. Actualízalo gratis en Play Store (o actualiza Google Chrome) y vuelve a abrir el juego.', 'Abrir Play Store', 'Tu navegador es demasiado antiguo para abrir Blocmo. Actualízalo (o usa Google Chrome) y vuelve a cargar la página.'],
+          de: ['Update erforderlich', '„Android System WebView“ auf deinem Handy ist zu alt für Blocmo. Aktualisiere es kostenlos im Play Store (oder aktualisiere Google Chrome) und öffne das Spiel dann erneut.', 'Play Store öffnen', 'Dein Browser ist zu alt für Blocmo. Aktualisiere ihn (oder nutze Google Chrome) und lade die Seite neu.'],
+          pt: ['Atualização necessária', 'O componente “Android System WebView” do seu celular é antigo demais para abrir o Blocmo. Atualize-o gratuitamente na Play Store (ou atualize o Google Chrome) e abra o jogo de novo.', 'Abrir a Play Store', 'Seu navegador é antigo demais para abrir o Blocmo. Atualize-o (ou use o Google Chrome) e recarregue a página.'],
+          it: ['Aggiornamento necessario', 'Il componente «Android System WebView» del tuo telefono è troppo vecchio per avviare Blocmo. Aggiornalo gratis dal Play Store (oppure aggiorna Google Chrome), poi riapri il gioco.', 'Apri il Play Store', 'Il tuo browser è troppo vecchio per avviare Blocmo. Aggiornalo (o usa Google Chrome), poi ricarica la pagina.'],
+          ja: ['アップデートが必要です', 'お使いの端末の「Android System WebView」が古いため、Blocmoを起動できません。Playストアで無料でアップデート（またはGoogle Chromeをアップデート）してから、もう一度ゲームを開いてください。', 'Playストアを開く', 'お使いのブラウザが古いため、Blocmoを起動できません。ブラウザをアップデート（またはGoogle Chromeを使用）してから、ページを再読み込みしてください。'],
+          ko: ['업데이트가 필요해요', '휴대폰의 ‘Android System WebView’가 너무 오래되어 Blocmo를 실행할 수 없어요. Play 스토어에서 무료로 업데이트(또는 Google Chrome 업데이트)한 뒤 게임을 다시 열어 주세요.', 'Play 스토어 열기', '브라우저가 너무 오래되어 Blocmo를 실행할 수 없어요. 브라우저를 업데이트(또는 Google Chrome 사용)한 뒤 페이지를 새로고침하세요.'],
+          'zh-Hans': ['需要更新', '你手机上的“Android System WebView”版本过旧，无法运行 Blocmo。请在 Play 商店免费更新它（或更新 Google Chrome），然后重新打开游戏。', '打开 Play 商店', '你的浏览器版本过旧，无法运行 Blocmo。请更新浏览器（或使用 Google Chrome），然后重新加载页面。'],
+          'zh-Hant': ['需要更新', '你手機上的「Android System WebView」版本過舊，無法執行 Blocmo。請在 Play 商店免費更新（或更新 Google Chrome），然後重新開啟遊戲。', '開啟 Play 商店', '你的瀏覽器版本過舊，無法執行 Blocmo。請更新瀏覽器（或使用 Google Chrome），然後重新載入頁面。'],
+          tr: ['Güncelleme gerekli', 'Telefonundaki “Android System WebView” Blocmo’yu çalıştırmak için çok eski. Play Store’dan ücretsiz güncelle (ya da Google Chrome’u güncelle), sonra oyunu yeniden aç.', 'Play Store’u aç', 'Tarayıcın Blocmo’yu çalıştırmak için çok eski. Güncelle (ya da Google Chrome kullan), sonra sayfayı yenile.'],
+          ru: ['Нужно обновление', 'Компонент «Android System WebView» на твоём телефоне слишком старый для Blocmo. Обнови его бесплатно в Play Маркете (или обнови Google Chrome) и снова открой игру.', 'Открыть Play Маркет', 'Твой браузер слишком старый для Blocmo. Обнови его (или используй Google Chrome) и перезагрузи страницу.'],
+          id: ['Perlu pembaruan', '“Android System WebView” di ponselmu terlalu lama untuk menjalankan Blocmo. Perbarui gratis di Play Store (atau perbarui Google Chrome), lalu buka game lagi.', 'Buka Play Store', 'Browsermu terlalu lama untuk menjalankan Blocmo. Perbarui (atau gunakan Google Chrome), lalu muat ulang halaman.'],
+          nl: ['Update nodig', '‘Android System WebView’ op je telefoon is te oud voor Blocmo. Werk het gratis bij via de Play Store (of werk Google Chrome bij) en open de game daarna opnieuw.', 'Play Store openen', 'Je browser is te oud voor Blocmo. Werk hem bij (of gebruik Google Chrome) en laad de pagina opnieuw.'],
+          pl: ['Wymagana aktualizacja', 'Składnik „Android System WebView” w twoim telefonie jest zbyt stary, by uruchomić Blocmo. Zaktualizuj go bezpłatnie w Sklepie Play (lub zaktualizuj Google Chrome), a potem otwórz grę ponownie.', 'Otwórz Sklep Play', 'Twoja przeglądarka jest zbyt stara, by uruchomić Blocmo. Zaktualizuj ją (lub użyj Google Chrome) i odśwież stronę.'],
+          vi: ['Cần cập nhật', '“Android System WebView” trên điện thoại của bạn đã quá cũ để chạy Blocmo. Hãy cập nhật miễn phí trên Cửa hàng Play (hoặc cập nhật Google Chrome), rồi mở lại trò chơi.', 'Mở Cửa hàng Play', 'Trình duyệt của bạn quá cũ để chạy Blocmo. Hãy cập nhật (hoặc dùng Google Chrome), rồi tải lại trang.'],
+          th: ['ต้องอัปเดต', '“Android System WebView” ในโทรศัพท์ของคุณเก่าเกินไปที่จะเปิด Blocmo อัปเดตได้ฟรีใน Play Store (หรืออัปเดต Google Chrome) แล้วเปิดเกมอีกครั้ง', 'เปิด Play Store', 'เบราว์เซอร์ของคุณเก่าเกินไปที่จะเปิด Blocmo อัปเดตเบราว์เซอร์ (หรือใช้ Google Chrome) แล้วโหลดหน้าใหม่'],
+          hi: ['अपडेट ज़रूरी है', 'तुम्हारे फ़ोन का “Android System WebView” Blocmo चलाने के लिए बहुत पुराना है। इसे Play Store से मुफ़्त में अपडेट करो (या Google Chrome अपडेट करो), फिर गेम दोबारा खोलो।', 'Play Store खोलो', 'तुम्हारा ब्राउज़र Blocmo चलाने के लिए बहुत पुराना है। इसे अपडेट करो (या Google Chrome इस्तेमाल करो), फिर पेज दोबारा लोड करो।'],
+        };
+        var lang = '';
+        try {
+          lang = (JSON.parse(localStorage.getItem('blocmo.settings') || '{}') || {}).lang || '';
+        } catch (e) {}
+        if (!T[lang]) {
+          var n = String(navigator.language || 'en').toLowerCase();
+          if (/^zh-(tw|hk|mo|hant)/.test(n)) lang = 'zh-Hant';
+          else if (n.indexOf('zh') === 0) lang = 'zh-Hans';
+          else lang = n.slice(0, 2);
+        }
+        var s = T[lang] || T.en;
+        // Appli Android (WebView) ou version navigateur ?
+        var app = !!window.Capacitor || location.hostname === 'localhost';
+        document.documentElement.lang = lang;
+        document.getElementById('t').textContent = s[0];
+        document.getElementById('b').textContent = app ? s[1] : s[3];
+        var a = document.getElementById('a');
+        if (app) a.textContent = s[2];
+        else a.style.display = 'none';
+      })();
+    </script>
+  </body>
+</html>
